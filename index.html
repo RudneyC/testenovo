@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo DataTables</title>
+    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+    <table id="myTable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script type="text/javascript" src="jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="papaparse.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.get("data.csv", function(data) {
+                var parsedData = Papa.parse(data, {header: true});
+                var columns = Object.keys(parsedData.data[0]);
+                var tableColumns = columns.map(function(col) {
+                    return {title: col, data: col};
+                });
+                var tableData = parsedData.data.map(function(row) {
+                    return columns.map(function(col) {
+                        return row[col];
+                    });
+                });
+
+                $('#myTable').DataTable({
+                    data: tableData,
+                    columns: tableColumns
+                });
+            });
+        });
+    </script>
+</body>
+</html>
